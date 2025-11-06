@@ -2,16 +2,17 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 header {
   background: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
   padding: 1rem 0;
+  width: 100%;
 
   .navbar {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,7 +49,8 @@ header {
 
 main {
   flex: 1;
-  padding: 2rem 0;
+  width: 100%;
+  padding: 0;
 }
 
 footer {
@@ -57,6 +59,7 @@ footer {
   padding: 1rem 0;
   text-align: center;
   color: #6c757d;
+  width: 100%;
 
   p {
     margin: 0;
