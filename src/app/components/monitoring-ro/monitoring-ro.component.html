@@ -37,7 +37,7 @@
                         <td class="px-3 py-3 text-xs text-gray-900 border-r border-gray-100 text-center">1</td>
                         <td class="px-3 py-3 text-xs text-gray-900 border-r border-gray-100">
                             <div class="space-y-1">
-                                <div class="font-semibold cursor-help text-blue-600 hover:text-blue-800 relative tooltip-trigger hover-element" 
+                                <div class="font-semibold cursor-help text-blue-600 hover:text-blue-800" 
                                      (mouseenter)="onMouseEnter($event, 'WA.4751.BCE.051 - Program Dukungan Manajemen / Pelaksanaan Tugas Khusus (Special Mission) / Penanganan Perkara (Perkara, Berkas Perkara) / Administrasi Persidangan (Perkara)')"
                                      (mouseleave)="onMouseLeave()"
                                      (mousemove)="onMouseMove($event)">
@@ -56,7 +56,7 @@
                         <td class="px-3 py-3 text-xs text-gray-900 border-r border-gray-100 text-center">2</td>
                         <td class="px-3 py-3 text-xs text-gray-900 border-r border-gray-100">
                             <div class="space-y-1">
-                                <div class="font-semibold cursor-help text-blue-600 hover:text-blue-800 relative tooltip-trigger hover-element" 
+                                <div class="font-semibold cursor-help text-blue-600 hover:text-blue-800" 
                                      (mouseenter)="onMouseEnter($event, 'WA.4751.BCE.051 - Program Dukungan Manajemen / Pelaksanaan Tugas Khusus (Special Mission) / Penanganan Perkara (Perkara, Berkas Perkara) / Administrasi Persidangan (Perkara)')"
                                      (mouseleave)="onMouseLeave()"
                                      (mousemove)="onMouseMove($event)">
@@ -94,12 +94,18 @@
         </div>  
     </div>
 
-    <!-- Tooltip -->
-    <div *ngIf="showTooltip" 
-         class="fixed z-50 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg pointer-events-none max-w-md"
-         [style.left.px]="tooltipPosition.x"
-         [style.top.px]="tooltipPosition.y">
-        {{ tooltipContent }}
+    <!-- Tooltip Component -->
+    <app-tooltip #tooltip></app-tooltip>
+
+    <!-- Save Button -->
+    <div class="mt-3 flex justify-end">
+        <button type="button" 
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+            Simpan
+        </button>
     </div>
 
 </div>

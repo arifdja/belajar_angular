@@ -1,0 +1,9 @@
+<div
+  *ngIf="isVisible && content"
+  [ngClass]="getTooltipClasses()"
+  [style.left.px]="actualPosition.x"
+  [style.top.px]="actualPosition.y"
+  [style.max-width]="maxWidth"
+  [style.opacity]="isVisible ? 1 : 0">
+  {{ content }}
+</div>

@@ -1,39 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TooltipComponent } from '../tooltip';
 
 @Component({
   selector: 'app-monitoring-ro',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TooltipComponent],
   templateUrl: './monitoring-ro.component.html',
   styleUrl: './monitoring-ro.component.scss'
 })
 export class MonitoringRoComponent {
-  showTooltip = false;
-  tooltipContent = '';
-  tooltipPosition = { x: 0, y: 0 };
+  @ViewChild(TooltipComponent) tooltip!: TooltipComponent;
 
   onMouseEnter(event: MouseEvent, detail: string): void {
-    this.tooltipContent = detail;
-    this.showTooltip = true;
-    this.updateTooltipPosition(event);
+    this.tooltip.show(event, detail);
   }
 
   onMouseLeave(): void {
-    this.showTooltip = false;
-    this.tooltipContent = '';
+    this.tooltip.hide();
   }
 
   onMouseMove(event: MouseEvent): void {
-    if (this.showTooltip) {
-      this.updateTooltipPosition(event);
-    }
-  }
-
-  private updateTooltipPosition(event: MouseEvent): void {
-    this.tooltipPosition = {
-      x: event.clientX + 10,
-      y: event.clientY - 10
-    };
+    this.tooltip.updatePosition(event);
   }
 }
