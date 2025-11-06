@@ -882,6 +882,366 @@ this.route.queryParams.subscribe(params => {
 7. **Loading States**: Tampilkan loading indicator untuk async operations
 8. **Accessibility**: Pastikan halaman accessible (ARIA labels, keyboard navigation)
 
+## 🎨 Integrasi Tailwind CSS
+
+### **🚀 Setup Tailwind CSS dengan Angular 18 + Docker**
+
+#### **Step 1: Install Tailwind CSS Dependencies**
+
+**Dalam Docker Container:**
+```bash
+# Akses container shell
+./dev.sh shell
+# atau
+docker-compose exec angular-app sh
+
+# Install Tailwind CSS
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+**Atau Update package.json dan rebuild container:**
+
+Update `package.json`:
+```json
+{
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.2.0",
+    "@angular/cli": "^18.2.0",
+    "@angular/compiler-cli": "^18.2.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.5.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
+  }
+}
+```
+
+#### **Step 2: Configure Tailwind CSS**
+
+**File: `tailwind.config.js`**
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{html,ts}",
+    "./src/app/**/*.{html,ts,scss}"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#eff6ff',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        },
+        secondary: {
+          50: '#f8fafc',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a',
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-in-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
+  darkMode: 'class', // Enable dark mode
+}
+```
+
+**File: `postcss.config.js`**
+```javascript
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+```
+
+#### **Step 3: Update Global Styles**
+
+**File: `src/styles.scss`**
+```scss
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom CSS Components */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-200 text-secondary-900 hover:bg-secondary-300 focus:ring-secondary-500;
+  }
+
+  .btn-outline {
+    @apply border border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 p-6;
+  }
+
+  .card-header {
+    @apply mb-4 pb-2 border-b border-gray-200;
+  }
+
+  .input-field {
+    @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500;
+  }
+
+  .navbar-link {
+    @apply text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors;
+  }
+
+  .navbar-link-active {
+    @apply bg-primary-100 text-primary-700;
+  }
+}
+
+/* Custom Base Styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans text-gray-900 bg-gray-50;
+  }
+
+  h1 {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
+  }
+
+  p {
+    @apply text-gray-600 leading-relaxed;
+  }
+
+  a {
+    @apply text-primary-600 hover:text-primary-700 transition-colors;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-gray-900 text-gray-100;
+  }
+
+  .card {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .card-header {
+    @apply border-gray-700;
+  }
+
+  p {
+    @apply text-gray-300;
+  }
+}
+```
+
+#### **Step 4: Rebuild Docker Container**
+
+```bash
+# Stop container
+docker-compose down
+
+# Rebuild dengan Tailwind dependencies
+docker-compose up --build
+
+# Atau menggunakan helper script
+./dev.sh clean
+./dev.sh start
+```
+
+### **🎨 Tailwind CSS Utilities yang Sering Digunakan**
+
+#### **Layout & Spacing:**
+```html
+<!-- Container dan spacing -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex items-center justify-between">
+
+<!-- Responsive breakpoints -->
+<div class="block md:hidden">Mobile only</div>
+<div class="hidden md:block">Desktop only</div>
+```
+
+#### **Typography:**
+```html
+<h1 class="text-4xl font-bold text-gray-900">
+<p class="text-lg text-gray-600 leading-relaxed">
+<span class="text-sm font-medium text-primary-600">
+```
+
+#### **Colors & Backgrounds:**
+```html
+<div class="bg-white text-gray-900">
+<div class="bg-gradient-to-r from-primary-500 to-blue-600">
+<button class="bg-primary-600 hover:bg-primary-700 text-white">
+```
+
+#### **Borders & Shadows:**
+```html
+<div class="border border-gray-200 rounded-lg shadow-md">
+<div class="shadow-lg hover:shadow-xl transition-shadow">
+```
+
+#### **Animations & Transitions:**
+```html
+<div class="transition-all duration-300 ease-in-out">
+<div class="animate-fade-in">
+<button class="transform hover:scale-105 transition-transform">
+```
+
+### **📱 Responsive Design dengan Tailwind**
+
+```html
+<!-- Mobile-first approach -->
+<div class="
+  w-full          <!-- Mobile: full width -->
+  md:w-1/2        <!-- Tablet: half width -->
+  lg:w-1/3        <!-- Desktop: one-third width -->
+  xl:w-1/4        <!-- Large desktop: one-fourth width -->
+">
+
+<!-- Responsive text sizes -->
+<h1 class="text-2xl md:text-4xl lg:text-6xl">
+
+<!-- Responsive padding -->
+<div class="p-4 md:p-8 lg:p-12">
+
+<!-- Responsive grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+```
+
+### **🌙 Dark Mode Support**
+
+```html
+<!-- Dark mode classes -->
+<div class="bg-white dark:bg-gray-900">
+<p class="text-gray-900 dark:text-gray-100">
+<button class="bg-primary-600 dark:bg-primary-500">
+
+<!-- Toggle dark mode (dalam component) -->
+<button (click)="toggleDarkMode()" 
+        class="p-2 rounded-md bg-gray-200 dark:bg-gray-700">
+  <svg class="w-5 h-5" [class.hidden]="!isDarkMode">🌙</svg>
+  <svg class="w-5 h-5" [class.hidden]="isDarkMode">☀️</svg>
+</button>
+```
+
+### **🔧 Tailwind CSS Plugins**
+
+Install additional plugins untuk functionality lebih:
+```bash
+npm install -D @tailwindcss/forms @tailwindcss/typography @tailwindcss/aspect-ratio
+```
+
+**Usage:**
+```html
+<!-- Forms plugin -->
+<input class="form-input rounded-md border-gray-300">
+<select class="form-select">
+
+<!-- Typography plugin -->
+<article class="prose lg:prose-xl">
+  <!-- Rich text content -->
+</article>
+
+<!-- Aspect ratio plugin -->
+<div class="aspect-w-16 aspect-h-9">
+  <iframe src="..."></iframe>
+</div>
+```
+
+### **⚡ Performance Optimization**
+
+#### **Purge Unused CSS:**
+Tailwind secara otomatis removes unused CSS dalam production build.
+
+#### **Bundle Size Analysis:**
+```bash
+# Check bundle size setelah Tailwind
+ng build --stats-json
+npx webpack-bundle-analyzer dist/belajar-angular/stats.json
+```
+
+### **🧪 Testing Tailwind Integration**
+
+```bash
+# Restart development server
+./dev.sh restart
+
+# Test responsive design
+# Resize browser window untuk test breakpoints
+
+# Test dark mode
+# Ubah system preference atau toggle dark mode button
+
+# Verify build
+ng build
+# Check dist/ untuk optimized CSS
+```
+
+## 🚀 Development Setup
+
 ## �🚀 Development Setup
 
 ### Prerequisites
