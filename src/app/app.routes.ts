@@ -11,5 +11,9 @@ export const routes: Routes = [
     path: 'profile',
     loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent)
   },
+  {
+    path: 'monitoring-ro',
+    loadComponent: () => import('./components/monitoring-ro/monitoring-ro.component').then(m => m.MonitoringRoComponent)
+  },
   { path: '**', loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent) }
 ];
