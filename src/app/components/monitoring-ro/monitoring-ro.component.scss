@@ -1,0 +1,35 @@
+// Tooltip Styles
+.tooltip-trigger {
+  position: relative;
+  
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease-in-out;
+  }
+}
+
+// Table hover effects
+.table-row {
+  &:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+    transition: background-color 0.15s ease-in-out;
+  }
+}
+
+// Smooth transitions for tooltip text
+.tooltip-text {
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+// Enhanced hover state for clickable elements
+.hover-element {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    color: #1d4ed8;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+}
