@@ -231,7 +231,658 @@ export const environment = {
 };
 ```
 
-## 🚀 Development Setup
+## � Urutan Eksekusi Kode Program (Code Flow)
+
+### **Step-by-Step: Dari Start hingga Halaman Utama Ditampilkan**
+
+#### **1. Entry Point - `src/main.ts`** 
+```typescript
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+import { AppComponent } from './app/app.component';
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch((err: any) => console.error(err));
+```
+**Proses:**
+- Browser memuat file ini sebagai entry point aplikasi
+- Import semua dependencies yang diperlukan
+- **`bootstrapApplication()`** memulai aplikasi Angular dengan komponen root `AppComponent`
+- `appConfig` berisi konfigurasi aplikasi (providers, routing, dll)
+
+#### **2. Application Configuration - `src/app/app.config.ts`**
+```typescript
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }), 
+    provideRouter(routes)
+  ]
+};
+```
+**Proses:**
+- Menyediakan **Zone.js** untuk change detection Angular
+- Menyediakan **Router** dengan konfigurasi routes
+- Mengatur providers yang dibutuhkan untuk dependency injection
+
+#### **3. Routing Configuration - `src/app/app.routes.ts`**
+```typescript
+export const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent) },
+  { path: '**', loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent) }
+];
+```
+**Proses:**
+- URL kosong (`''`) → otomatis redirect ke `/home`
+- URL `/home` → lazy load `HomeComponent` (dimuat sesuai kebutuhan)
+- URL tidak dikenal (`'**'`) → lazy load `NotFoundComponent` (404 fallback)
+
+#### **4. Root Component - `src/app/app.component.ts`**
+```typescript
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
+})
+export class AppComponent {
+  title = 'belajar-angular';
+}
+```
+**Proses:**
+- Komponen ini menjadi **root container** untuk seluruh aplikasi
+- Import `RouterOutlet` untuk menampilkan komponen berdasarkan route
+- Property `title` akan ditampilkan di template sebagai judul aplikasi
+
+#### **5. Root Template - `src/app/app.component.html`**
+```html
+<div class="container">
+  <header>
+    <nav class="navbar">
+      <h1>{{ title }}</h1>  <!-- Menampilkan "belajar-angular" -->
+    </nav>
+  </header>
+  
+  <main>
+    <router-outlet></router-outlet>  <!-- Tempat komponen route ditampilkan -->
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Belajar Angular</p>
+  </footer>
+</div>
+```
+**Proses:**
+- Menampilkan layout dasar aplikasi (header, main, footer)
+- `{{ title }}` melakukan data binding untuk menampilkan nilai dari `AppComponent.title`
+- `<router-outlet>` adalah placeholder tempat komponen route akan dirender
+
+#### **6. Home Component - `src/app/components/home/home.component.ts`**
+```typescript
+export class HomeComponent {
+  title = 'Welcome to Angular Development with Docker!';
+  features = [
+    'Angular Latest Version',
+    'Docker Development Environment',
+    'Hot Reload Support',
+    'Production Ready Build',
+    'Nginx Configuration'
+  ];
+}
+```
+**Proses:**
+- Karena route `/home` dipanggil, komponen ini di-lazy load secara dinamis
+- Menyediakan data untuk template (title dan features array)
+- Class ini mengatur state dan behavior untuk halaman home
+
+#### **7. Home Template - `src/app/components/home/home.component.html`**
+```html
+<div class="home-container">
+  <div class="hero-section">
+    <h1>{{ title }}</h1>  <!-- Welcome message -->
+    <p>This is a complete Angular development environment with Docker setup.</p>
+  </div>
+
+  <div class="features-section">
+    <h2>Features</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">  <!-- Loop array features -->
+        <h3>{{ feature }}</h3>
+        <p>Configured and ready to use</p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+### **🔄 Complete Flow Execution:**
+
+```
+1. Browser memuat index.html
+   ↓
+2. main.ts dieksekusi → bootstrapApplication()
+   ↓
+3. AppComponent dimuat sebagai root component
+   ↓
+4. app.config.ts menyediakan providers (Router, Zone.js)
+   ↓
+5. Router mengecek URL saat ini ('')
+   ↓
+6. Route '' redirect ke '/home'
+   ↓
+7. Route '/home' trigger lazy loading HomeComponent
+   ↓
+8. HomeComponent dimuat dan dirender di <router-outlet>
+   ↓
+9. Template home.component.html ditampilkan dengan data dari component
+   ↓
+10. Halaman utama berhasil ditampilkan! 🎉
+```
+
+### **🎯 Hasil Akhir yang Ditampilkan:**
+User akan melihat halaman dengan struktur:
+- **Header:** Navbar dengan title "belajar-angular" 
+- **Main Content:** Welcome message, daftar features dalam grid, dan getting started guide
+- **Footer:** Copyright 2025 Belajar Angular
+
+### **🚀 Keunggulan Angular 18 dalam Flow ini:**
+- ✅ **Standalone Components** - Tidak memerlukan NgModules, langsung import dependencies
+- ✅ **Lazy Loading** - Komponen dimuat sesuai kebutuhan untuk performa optimal
+- ✅ **Application Builder** - Build process yang lebih cepat dari browser builder
+- ✅ **Modern TypeScript** - Support TypeScript 5.5 untuk type safety
+- ✅ **Zone.js Optimization** - Event coalescing untuk performa change detection
+
+### **📊 Performance Metrics Flow:**
+- **Initial Load**: ~1.7 seconds untuk bootstrap aplikasi
+- **Bundle Size**: 91.46 kB initial bundle (polyfills + main + styles)
+- **Lazy Loading**: Home component (5.81 kB) dimuat setelah route resolution
+- **Change Detection**: Zone.js mengoptimasi dengan event coalescing
+
+## 🆕 Membuat Halaman Baru (Step-by-Step Guide)
+
+### **🎯 Scenario: Membuat Halaman "About"**
+
+#### **Step 1: Buat Component Baru**
+
+**Opsi A: Menggunakan Angular CLI (Dalam Container)**
+```bash
+# Akses container shell
+./dev.sh shell
+# atau
+docker-compose exec angular-app sh
+
+# Generate component baru
+ng generate component components/about --standalone
+
+# Atau dengan shorthand
+ng g c components/about --standalone
+```
+
+**Opsi B: Manual Creation (Tanpa CLI)**
+```bash
+# Buat folder untuk component
+mkdir -p src/app/components/about
+
+# Buat files component
+touch src/app/components/about/about.component.ts
+touch src/app/components/about/about.component.html
+touch src/app/components/about/about.component.scss
+```
+
+#### **Step 2: Implement Component Code**
+
+**File: `src/app/components/about/about.component.ts`**
+```typescript
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-about',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './about.component.html',
+  styleUrl: './about.component.scss'
+})
+export class AboutComponent {
+  title = 'About Our Project';
+  description = 'This is an Angular 18 application built with Docker for development and production.';
+  
+  features = [
+    {
+      name: 'Angular 18',
+      description: 'Latest version with standalone components'
+    },
+    {
+      name: 'Docker Setup',
+      description: 'Consistent development environment'
+    },
+    {
+      name: 'TypeScript 5.5',
+      description: 'Strong typing and modern JavaScript features'
+    }
+  ];
+
+  team = [
+    { name: 'Developer 1', role: 'Frontend Developer' },
+    { name: 'Developer 2', role: 'Backend Developer' },
+    { name: 'Developer 3', role: 'DevOps Engineer' }
+  ];
+}
+```
+
+**File: `src/app/components/about/about.component.html`**
+```html
+<div class="about-container">
+  <div class="hero-section">
+    <h1>{{ title }}</h1>
+    <p class="lead">{{ description }}</p>
+  </div>
+
+  <div class="features-section">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <h3>{{ feature.name }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-section">
+    <h2>Our Team</h2>
+    <div class="team-grid">
+      <div class="team-member" *ngFor="let member of team">
+        <h4>{{ member.name }}</h4>
+        <p>{{ member.role }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-section">
+    <button type="button" (click)="goBack()" class="btn btn-secondary">
+      ← Back to Home
+    </button>
+  </div>
+</div>
+```
+
+**File: `src/app/components/about/about.component.scss`**
+```scss
+.about-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .hero-section {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .lead {
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .features-section,
+  .team-section {
+    margin-bottom: 3rem;
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+  }
+
+  .features-grid,
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .feature-card,
+  .team-member {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+
+    h3, h4 {
+      color: #495057;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #6c757d;
+      margin: 0;
+    }
+  }
+
+  .action-section {
+    text-align: center;
+    margin-top: 3rem;
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-block;
+
+      &.btn-secondary {
+        background-color: #6c757d;
+        color: white;
+
+        &:hover {
+          background-color: #5a6268;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .about-container {
+    padding: 1rem;
+
+    .hero-section h1 {
+      font-size: 2rem;
+    }
+
+    .features-grid,
+    .team-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+```
+
+#### **Step 3: Tambahkan Method untuk Navigation (Optional)**
+
+**Update `src/app/components/about/about.component.ts`**
+```typescript
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-about',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './about.component.html',
+  styleUrl: './about.component.scss'
+})
+export class AboutComponent {
+  // ... existing code ...
+
+  constructor(private router: Router) {}
+
+  goBack() {
+    this.router.navigate(['/home']);
+  }
+}
+```
+
+#### **Step 4: Tambahkan Route untuk Halaman Baru**
+
+**Update `src/app/app.routes.ts`**
+```typescript
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { 
+    path: 'home', 
+    loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent) 
+  },
+  { 
+    path: 'about', 
+    loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent) 
+  },
+  { 
+    path: '**', 
+    loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent) 
+  }
+];
+```
+
+#### **Step 5: Tambahkan Navigation Link**
+
+**Update `src/app/app.component.html`** untuk menambahkan navigasi:
+```html
+<div class="container">
+  <header>
+    <nav class="navbar">
+      <h1>{{ title }}</h1>
+      <div class="nav-links">
+        <a routerLink="/home" routerLinkActive="active">Home</a>
+        <a routerLink="/about" routerLinkActive="active">About</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Belajar Angular</p>
+  </footer>
+</div>
+```
+
+**Update `src/app/app.component.ts`** untuk import RouterLink:
+```typescript
+import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
+})
+export class AppComponent {
+  title = 'belajar-angular';
+}
+```
+
+**Update `src/app/app.component.scss`** untuk styling navigation:
+```scss
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 0;
+
+  .navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+
+    h1 {
+      margin: 0;
+      color: #333;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+
+      a {
+        text-decoration: none;
+        color: #495057;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: #e9ecef;
+        }
+
+        &.active {
+          background-color: #007bff;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+main {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+footer {
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 0;
+  text-align: center;
+  color: #6c757d;
+
+  p {
+    margin: 0;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+
+    .nav-links {
+      justify-content: center;
+    }
+  }
+}
+```
+
+#### **Step 6: Test Halaman Baru**
+
+```bash
+# Restart development server jika diperlukan
+./dev.sh restart
+
+# Atau restart container
+docker-compose restart
+
+# Access aplikasi
+open http://localhost:4200
+```
+
+### **🧪 Testing Checklist**
+
+- ✅ **Route Navigation**: Pastikan `/about` dapat diakses
+- ✅ **Lazy Loading**: Component dimuat sesuai kebutuhan
+- ✅ **Navigation Links**: Link aktif dan bekerja dengan baik
+- ✅ **Responsive Design**: Tampilan baik di berbagai ukuran layar
+- ✅ **Back Navigation**: Button back berfungsi
+- ✅ **Hot Reload**: Perubahan ter-reload otomatis
+
+### **🔄 Pattern untuk Halaman Lainnya**
+
+Untuk membuat halaman lain (Contact, Services, dll), ikuti pattern yang sama:
+
+1. **Generate/Create Component**
+2. **Implement TypeScript Logic**
+3. **Create HTML Template**
+4. **Add SCSS Styling**
+5. **Add Route Configuration**
+6. **Update Navigation**
+7. **Test & Verify**
+
+### **📁 Struktur Setelah Penambahan About Page**
+
+```
+src/app/components/
+├── home/
+│   ├── home.component.ts
+│   ├── home.component.html
+│   └── home.component.scss
+├── about/              ← New page
+│   ├── about.component.ts
+│   ├── about.component.html
+│   └── about.component.scss
+└── not-found/
+    ├── not-found.component.ts
+    ├── not-found.component.html
+    └── not-found.component.scss
+```
+
+### **� Advanced Features (Optional)**
+
+#### **A. Route Parameters**
+```typescript
+// Route dengan parameter
+{ path: 'user/:id', loadComponent: () => import('./components/user/user.component').then(m => m.UserComponent) }
+
+// Dalam component
+constructor(private route: ActivatedRoute) {}
+
+ngOnInit() {
+  const userId = this.route.snapshot.paramMap.get('id');
+}
+```
+
+#### **B. Route Guards**
+```typescript
+// Protect route dengan guard
+{ 
+  path: 'admin', 
+  loadComponent: () => import('./components/admin/admin.component').then(m => m.AdminComponent),
+  canActivate: [AuthGuard]
+}
+```
+
+#### **C. Query Parameters**
+```typescript
+// Navigate dengan query params
+this.router.navigate(['/search'], { queryParams: { q: 'angular' } });
+
+// Read query params
+this.route.queryParams.subscribe(params => {
+  const searchQuery = params['q'];
+});
+```
+
+### **💡 Best Practices untuk Halaman Baru**
+
+1. **Naming Convention**: Gunakan kebab-case untuk nama component
+2. **Standalone Components**: Selalu gunakan standalone: true untuk Angular 18
+3. **Lazy Loading**: Gunakan dynamic import untuk performa optimal
+4. **Responsive Design**: Pastikan halaman responsive di semua device
+5. **SEO Friendly**: Tambahkan meta tags jika diperlukan
+6. **Error Handling**: Handle error states dalam component
+7. **Loading States**: Tampilkan loading indicator untuk async operations
+8. **Accessibility**: Pastikan halaman accessible (ARIA labels, keyboard navigation)
+
+## �🚀 Development Setup
 
 ### Prerequisites
 - Docker (v20.10+)
