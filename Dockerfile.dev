@@ -4,14 +4,14 @@ FROM node:20-alpine
 # Set working directory
 WORKDIR /app
 
-# Install Angular CLI version 18
-RUN npm install -g @angular/cli@18
+# Install Angular CLI version 18.2
+RUN npm install -g @angular/cli@18.2.0
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Clear npm cache and install dependencies
+RUN npm cache clean --force && npm install
 
 # Copy project files
 COPY . .
