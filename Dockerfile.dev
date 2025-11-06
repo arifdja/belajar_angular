@@ -1,0 +1,23 @@
+# Development Dockerfile for Angular 18
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install Angular CLI version 18
+RUN npm install -g @angular/cli@18
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy project files
+COPY . .
+
+# Expose port
+EXPOSE 4200
+
+# Start development server
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200", "--poll", "2000"]

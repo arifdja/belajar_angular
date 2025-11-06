@@ -1,0 +1,15 @@
+services:
+  angular-app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: angular-production
+    ports:
+      - "80:80"
+    networks:
+      - angular-prod-network
+    restart: unless-stopped
+
+networks:
+  angular-prod-network:
+    driver: bridge

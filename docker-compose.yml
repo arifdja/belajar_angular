@@ -1,0 +1,44 @@
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: angular-dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./src:/app/src
+      - ./angular.json:/app/angular.json
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.app.json:/app/tsconfig.app.json
+      - ./tsconfig.spec.json:/app/tsconfig.spec.json
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: ng serve --host 0.0.0.0 --port 4200 --poll 2000
+    restart: unless-stopped
+    networks:
+      - angular-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: angular-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./dist:/usr/share/nginx/html
+    depends_on:
+      - angular-app
+    networks:
+      - angular-network
+    profiles:
+      - production
+
+volumes:
+  node_modules:
+
+networks:
+  angular-network:
+    driver: bridge
