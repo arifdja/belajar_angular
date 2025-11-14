@@ -1,14 +1,15 @@
-Ini adalah komponen utama {{title}}.
+<div class="p-6">
+  <h1 class="text-2xl font-bold text-blue-600">Ini adalah komponen utama {{title}}.</h1>
 
-<ul>  
+  <ul class="mt-4 list-disc pl-6">  
   <li *ngFor="let d of data">
     {{ d.nama }} - {{ d.umur }} tahun - {{ d.alamat }}
   </li>
-</ul>
+  </ul>
 
-<app-tombol aksi="Tulis Log" (klik)="fungsiParent($event)"></app-tombol>
-<app-tombol aksi="Proses Lain" (klik)="fungsiParent2($event)"></app-tombol>
-
-
-
-<router-outlet></router-outlet>
+  <div class="mt-6 flex gap-3">
+    <app-tombol aksi="Tulis Log" (klik)="fungsiParent($event)"></app-tombol>
+    <app-tombol aksi="Proses Lain" (klik)="fungsiParent2($event)"></app-tombol>
+  </div>
+  <router-outlet></router-outlet>
+</div>

@@ -57,3 +57,12 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Tailwind CSS
+
+- Installed: `tailwindcss@^3`, `postcss@^8`, `autoprefixer@^10`.
+- Config: `tailwind.config.js` and `postcss.config.js` at project root.
+- Enabled in: `src/styles.scss` with `@tailwind base;`, `@tailwind components;`, `@tailwind utilities;`.
+- Usage: add utility classes in templates, e.g. `<h1 class="text-2xl font-bold text-blue-600">Hello</h1>`.
+- Build: `npm run build -- --configuration development`.
+- Serve: `ng serve` (if port 4200 is used, try `ng serve --port 4300`).
