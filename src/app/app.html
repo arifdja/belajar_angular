@@ -1,15 +1,10 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold text-blue-600">Ini adalah komponen utama {{title}}.</h1>
-
-  <ul class="mt-4 list-disc pl-6">  
-  <li *ngFor="let d of data">
-    {{ d.nama }} - {{ d.umur }} tahun - {{ d.alamat }}
-  </li>
-  </ul>
-
-  <div class="mt-6 flex gap-3">
-    <app-tombol aksi="Tulis Log" (klik)="fungsiParent($event)"></app-tombol>
-    <app-tombol aksi="Proses Lain" (klik)="fungsiParent2($event)"></app-tombol>
-  </div>
+<div class="container mx-auto p-6">
+  <nav class="mb-6 flex space-x-4 bg-white shadow rounded-lg p-4">
+    <a routerLink="/home" routerLinkActive="active" class="px-4 py-2 rounded-md text-gray-700 font-semibold hover:bg-blue-100 hover:text-blue-700 transition-colors duration-200">Home</a>
+    <a routerLink="/kalkulator" routerLinkActive="active" class="px-4 py-2 rounded-md text-gray-700 font-semibold hover:bg-blue-100 hover:text-blue-700 transition-colors duration-200">Kalkulator</a>
+    <a routerLink="/form" routerLinkActive="active" class="px-4 py-2 rounded-md text-gray-700 font-semibold hover:bg-blue-100 hover:text-blue-700 transition-colors duration-200">Form</a>
+    <a routerLink="/latihan" routerLinkActive="active" class="px-4 py-2 rounded-md text-gray-700 font-semibold hover:bg-blue-100 hover:text-blue-700 transition-colors duration-200">Latihan</a>
+    
+  </nav>
   <router-outlet></router-outlet>
 </div>

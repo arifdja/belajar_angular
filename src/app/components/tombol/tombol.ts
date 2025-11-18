@@ -17,6 +17,4 @@ export class Tombol {
     this.klik.emit(this.aksi);
   }
 
-  
-
 }
