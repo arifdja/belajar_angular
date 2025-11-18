@@ -4,6 +4,7 @@ import { Latihan } from './pages/latihan/latihan';
 import { Home } from './pages/home/home';
 import { Kalkulator } from './pages/kalkulator/kalkulator';
 import { List } from './pages/user/list/list';
+import { ListRxjs } from './pages/user/list-rxjs/list-rxjs';
 import { BelajarButton } from './pages/belajar-button/belajar-button';
 
 export const routes: Routes = [
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'form', component: Form },
   { path: 'latihan', component: Latihan },
   { path: 'user/list', component: List },
+  { path: 'user/list-rxjs', component: ListRxjs },
   { path: 'belajar-button', component: BelajarButton },
 
 

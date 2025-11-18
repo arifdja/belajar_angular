@@ -1,0 +1,82 @@
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md mt-8">
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">User List dengan RxJS</h2>
+  
+  <!-- Search Box -->
+  <div class="mb-6">
+    <div class="relative">
+      <input 
+        type="text" 
+        [(ngModel)]="searchValue"
+        (input)="onSearch(searchValue)"
+        placeholder="Cari user berdasarkan nama atau email..."
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button 
+        *ngIf="searchValue"
+        (click)="clearSearch()"
+        class="absolute right-3 top-2 text-gray-500 hover:text-gray-700"
+      >
+        &times;
+      </button>
+    </div>
+    <p class="text-sm text-gray-500 mt-2">
+      💡 Menggunakan debounceTime(500ms), distinctUntilChanged, switchMap
+    </p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-8">
+    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    <p class="mt-2 text-gray-600">Loading...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ error }}
+  </div>
+
+  <!-- Users Table with Async Pipe -->
+  <div *ngIf="!loading && !error">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="border px-4 py-2 text-left">ID</th>
+          <th class="border px-4 py-2 text-left">Nama</th>
+          <th class="border px-4 py-2 text-left">Email</th>
+          <th class="border px-4 py-2 text-left">Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Async pipe untuk subscribe otomatis -->
+        <tr *ngFor="let user of users$ | async; trackBy: trackByUserId" class="hover:bg-gray-50">
+          <td class="border px-4 py-2">{{ user.id }}</td>
+          <td class="border px-4 py-2 font-medium">{{ user.name }}</td>
+          <td class="border px-4 py-2 text-gray-600">{{ user.email }}</td>
+          <td class="border px-4 py-2 text-gray-600">{{ user.phone }}</td>
+        </tr>
+        
+        <!-- Empty State -->
+        <tr *ngIf="(users$ | async)?.length === 0">
+          <td colspan="4" class="border px-4 py-8 text-center text-gray-500">
+            Tidak ada user yang ditemukan
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Info RxJS Operators -->
+  <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+    <h3 class="font-bold text-blue-800 mb-2">RxJS Operators yang Digunakan:</h3>
+    <ul class="list-disc list-inside text-sm text-blue-700 space-y-1">
+      <li><strong>debounceTime(500)</strong> - Tunggu 500ms setelah user berhenti mengetik</li>
+      <li><strong>distinctUntilChanged()</strong> - Hanya emit jika nilai berubah</li>
+      <li><strong>switchMap()</strong> - Cancel request sebelumnya, ambil yang terbaru</li>
+      <li><strong>map()</strong> - Transform dan filter data</li>
+      <li><strong>catchError()</strong> - Handle error</li>
+      <li><strong>tap()</strong> - Side effect (logging, set state)</li>
+      <li><strong>shareReplay(1)</strong> - Share hasil untuk multiple subscribers</li>
+      <li><strong>takeUntil()</strong> - Auto unsubscribe saat component destroy</li>
+    </ul>
+  </div>
+</div>
