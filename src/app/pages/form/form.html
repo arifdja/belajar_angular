@@ -11,7 +11,11 @@
         class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <small *ngIf="formData.get('nama')?.invalid && formData.get('nama')?.touched" class="text-red-500 text-xs mt-1 block">
-        Nama wajib diisi
+        <span *ngIf="formData.get('nama')?.errors?.['required']">Nama wajib diisi</span>
+        <span *ngIf="formData.get('nama')?.errors?.['minlength']">Nama minimal 2 karakter</span>
+        <span *ngIf="formData.get('nama')?.errors?.['maxlength']">Nama maksimal 50 karakter</span>
+        <span *ngIf="formData.get('nama')?.errors?.['invalidChars']">Hanya huruf, angka, dan spasi yang diperbolehkan</span>
+        <span *ngIf="formData.get('nama')?.errors?.['specialChars']">Karakter berbahaya terdeteksi</span>
       </small>
     </div>
     <div>
@@ -24,7 +28,9 @@
         class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <small *ngIf="formData.get('email')?.invalid && formData.get('email')?.touched" class="text-red-500 text-xs mt-1 block">
-        Email valid wajib diisi
+        <span *ngIf="formData.get('email')?.errors?.['required']">Email wajib diisi</span>
+        <span *ngIf="formData.get('email')?.errors?.['email']">Format email tidak valid</span>
+        <span *ngIf="formData.get('email')?.errors?.['maxlength']">Email maksimal 100 karakter</span>
       </small>
     </div>
     <div>
@@ -37,7 +43,10 @@
         class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       ></textarea>
       <small *ngIf="formData.get('pesan')?.invalid && formData.get('pesan')?.touched" class="text-red-500 text-xs mt-1 block">
-        Pesan wajib diisi
+        <span *ngIf="formData.get('pesan')?.errors?.['required']">Pesan wajib diisi</span>
+        <span *ngIf="formData.get('pesan')?.errors?.['minlength']">Pesan minimal 10 karakter</span>
+        <span *ngIf="formData.get('pesan')?.errors?.['maxlength']">Pesan maksimal 500 karakter</span>
+        <span *ngIf="formData.get('pesan')?.errors?.['specialChars']">Karakter berbahaya terdeteksi</span>
       </small>
     </div>
     <button 

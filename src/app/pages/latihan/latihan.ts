@@ -19,8 +19,31 @@ export class Latihan {
   ];
 
   // Contoh two-way data binding
-  public namaUser: string = '';
-  public kotaUser: string = '';
+  private _namaUser: string = '';
+  private _kotaUser: string = '';
+
+  // Getter dan setter dengan sanitasi untuk namaUser
+  public get namaUser(): string {
+    return this._namaUser;
+  }
+
+  public set namaUser(value: string) {
+    // Sanitasi input: hanya izinkan alfanumerik dan spasi, max 50 karakter
+    this._namaUser = value
+      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .substring(0, 50);
+  }
+
+  // Getter dan setter dengan sanitasi untuk kotaUser
+  public get kotaUser(): string {
+    return this._kotaUser;
+  }
+
+  public set kotaUser(value: string) {
+    // Sanitasi input: hanya izinkan nilai yang valid
+    const validCities = ['', 'Jakarta', 'Bandung', 'Surabaya'];
+    this._kotaUser = validCities.includes(value) ? value : '';
+  }
 
   protected fungsiParent($event: string) {
     console.log('Tombol diklik', $event);
