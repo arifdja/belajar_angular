@@ -1,13 +1,28 @@
 <table>
-    <tr>
-        <th>ID</th>
-        <th>Nama</th>
-        <th>Email</th>
-    </tr>
-    <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-    </tr>
-
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users" (click)="getDetailUser(user.id)" style="cursor: pointer;">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+    </tbody>
 </table>
+
+<!-- Menggunakan komponen modal -->
+<!-- [show]: Property binding untuk kontrol tampil/sembunyikan modal berdasarkan nilai showModal -->
+<!-- [title]: Property binding untuk mengirim judul modal secara statis -->
+<!-- [user]: Property binding untuk mengirim data user yang dipilih ke modal -->
+<!-- (closeEvent): Event binding untuk menangkap event close dari modal dan memanggil fungsi closeModal() -->
+<app-modal 
+    [show]="showModal" 
+    [title]="'Detail User'" 
+    [user]="selectedUser" 
+    (closeEvent)="closeModal()">
+</app-modal>
