@@ -12,4 +12,23 @@
         <app-tombol aksi="Tulis Log" (klik)="fungsiParent($event)"></app-tombol>
         <app-tombol aksi="Proses Lain" (klik)="fungsiParent2($event)"></app-tombol>
     </div>
+
+    <!-- Contoh Two-way Data Binding -->
+    <div class="mt-8">
+        <label class="block mb-2 font-medium">Nama User (Two-way Binding):</label>
+        <input type="text" [(ngModel)]="namaUser" class="border px-3 py-2 rounded w-full" placeholder="Masukkan nama user" />
+        <p class="mt-2 text-gray-700">Nama yang diketik: <span class="font-semibold">{{ namaUser }}</span></p>
+    </div>
+
+    <!-- Contoh Two-way Data Binding untuk Selectbox -->
+    <div class="mt-8">
+        <label class="block mb-2 font-medium">Pilih Kota:</label>
+        <select [(ngModel)]="kotaUser" class="border px-3 py-2 rounded w-full">
+            <option value="">-- Pilih Kota --</option>
+            <option value="Jakarta">Jakarta</option>
+            <option value="Bandung">Bandung</option>
+            <option value="Surabaya">Surabaya</option>
+        </select>
+        <p class="mt-2 text-gray-700">Kota yang dipilih: <span class="font-semibold">{{ kotaUser }}</span></p>
+    </div>
 </div>
